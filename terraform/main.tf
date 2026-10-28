@@ -28,11 +28,10 @@ resource "random_string" "suffix" {
   special = false
 }
 
-# Public access remains temporarily enabled so local administration
-# and GitHub-hosted CI can access Key Vault.
-#checkov:skip=CKV_AZURE_189:Public access temporarily required for GitHub-hosted CI and local administration; private endpoint is already configured.
-#checkov:skip=CKV_AZURE_109:Firewall lockdown deferred until workload and CI have private VNet connectivity.
 resource "azurerm_key_vault" "app" {
+  #checkov:skip=CKV_AZURE_189:Public access temporarily required for GitHub-hosted CI and local administration; private endpoint is already configured.
+  #checkov:skip=CKV_AZURE_109:Firewall lockdown deferred until workload and CI have private VNet connectivity.
+
   name = "kv-${var.project_name}-${var.environment}-${random_string.suffix.result}"
 
   location            = azurerm_resource_group.app.location
@@ -81,13 +80,11 @@ resource "azurerm_private_dns_zone_virtual_network_link" "sql" {
   }
 }
 
-# Vulnerability Assessment and auditing are deferred for this
-# low-cost development lab and will be implemented during
-# the monitoring/observability stage.
-#checkov:skip=CKV2_AZURE_2:SQL Vulnerability Assessment storage configuration deferred for this low-cost development lab.
-#checkov:skip=CKV_AZURE_23:SQL auditing will be implemented during the monitoring and security-observability stage.
-#checkov:skip=CKV_AZURE_24:Audit retention configuration will be implemented with centralized monitoring.
 resource "azurerm_mssql_server" "app" {
+  #checkov:skip=CKV2_AZURE_2:SQL Vulnerability Assessment storage configuration deferred for this low-cost development lab.
+  #checkov:skip=CKV_AZURE_23:SQL auditing will be implemented during the monitoring and security-observability stage.
+  #checkov:skip=CKV_AZURE_24:Audit retention configuration will be implemented with centralized monitoring.
+
   name = "sql-${var.project_name}-${var.environment}-${random_string.suffix.result}"
 
   resource_group_name = azurerm_resource_group.app.name
@@ -112,11 +109,10 @@ resource "azurerm_mssql_server" "app" {
   }
 }
 
-# Basic SKU is intentional for this development lab.
-# Zone redundancy and Ledger are not required for this workload.
-#checkov:skip=CKV_AZURE_229:Basic SKU selected intentionally for low-cost development lab; zone redundancy will be evaluated for production.
-#checkov:skip=CKV_AZURE_224:Ledger is not required for this application workload; no requirement for cryptographic nonrepudiation.
 resource "azurerm_mssql_database" "app" {
+  #checkov:skip=CKV_AZURE_229:Basic SKU selected intentionally for low-cost development lab; zone redundancy will be evaluated for production.
+  #checkov:skip=CKV_AZURE_224:Ledger is not required for this application workload; no requirement for cryptographic nonrepudiation.
+
   name      = "sqldb-${var.project_name}-${var.environment}"
   server_id = azurerm_mssql_server.app.id
 
