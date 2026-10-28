@@ -26,3 +26,8 @@ variable "project_name" {
   type        = string
   default     = "securepaas"
 }
+variable "secret_expiration_date" {
+  description = "Expiration date for Key Vault application configuration secrets"
+  type        = string
+  default     = "2027-10-26T00:00:00Z"
+}
