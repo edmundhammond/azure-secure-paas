@@ -31,3 +31,8 @@ variable "secret_expiration_date" {
   type        = string
   default     = "2027-10-26T00:00:00Z"
 }
+variable "admin_object_id" {
+  description = "Microsoft Entra object ID of the human administrator"
+  type        = string
+  default     = "4c064d64-565c-443a-8c4b-44ebaa419f7b"
+}

@@ -97,7 +97,7 @@ resource "azurerm_mssql_server" "app" {
 
   azuread_administrator {
     login_username              = "AzureAD Admin"
-    object_id                   = data.azurerm_client_config.current.object_id
+    object_id                   = var.admin_object_id
     tenant_id                   = data.azurerm_client_config.current.tenant_id
     azuread_authentication_only = true
   }
@@ -158,7 +158,7 @@ resource "azurerm_private_endpoint" "sql" {
 resource "azurerm_role_assignment" "current_user_key_vault_secrets_officer" {
   scope                = azurerm_key_vault.app.id
   role_definition_name = "Key Vault Secrets Officer"
-  principal_id         = data.azurerm_client_config.current.object_id
+  principal_id         = var.admin_object_id
 }
 
 resource "azurerm_key_vault_secret" "sql_server_fqdn" {
